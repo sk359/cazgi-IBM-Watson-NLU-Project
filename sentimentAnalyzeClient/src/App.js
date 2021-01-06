@@ -10,6 +10,10 @@ class App extends React.Component {
           sentimentOutput:[],
           sentiment:true
         }
+
+  componentDidMount() {
+      document.title = "Sentiment Analyzer";
+  }        
   
   renderTextArea = ()=>{
     document.getElementById("textinput").value = "";
@@ -48,14 +52,16 @@ class App extends React.Component {
 
       //Include code here to check the sentiment and fomrat the data accordingly
 
-      this.setState({sentimentOutput:response.data});
+      this.setState({sentimentOutput:<div></div>});
       let output = response.data;
-      if(response.data === "positive") {
-        output = <div style={{color:"green",fontSize:20}}>{response.data}</div>
-      } else if (response.data === "negative"){
-        output = <div style={{color:"red",fontSize:20}}>{response.data}</div>
+      const data = response.data;
+      //onsole.log('data', response.data)
+      if(data.label === "positive") {
+        output = <div style={{color:"green",fontSize:20}}>{data.label} (Score: {data.score})</div>
+      } else if (data.label === "negative"){
+        output = <div style={{color:"red",fontSize:20}}>{data.label} (Score: {data.score})</div>
       } else {
-        output = <div style={{color:"orange",fontSize:20}}>{response.data}</div>
+        output = <div style={{color:"orange",fontSize:20}}>{data.label} (Score: {data.score})</div>
       }
       this.setState({sentimentOutput:output});
     });
@@ -75,7 +81,7 @@ class App extends React.Component {
     ret.then((response)=>{
       this.setState({sentimentOutput:<EmotionTable emotions={response.data}/>});
   });
-  }
+  }  
   
 
   render() {
